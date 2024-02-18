@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerManager : CharacterManager
@@ -16,6 +17,10 @@ public class PlayerManager : CharacterManager
     protected override void Update()
     {
         base.Update();
+
+        //IF WE DO NOT OWN THE GAME, WE DO NOT CONTROL OR EDIT       
+        if (!IsOwner)
+            return;
         
         //HANDLE MOVEMENT
         playerLocomotionManager.HandleAllMovement();

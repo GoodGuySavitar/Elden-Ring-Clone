@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,7 +12,10 @@ public class PlayerInputManager : MonoBehaviour
 
     public static PlayerInputManager Instance;
     private PlayerControls playerControls;
-    
+    public float verticalInput;
+    public float horizontalInput;
+    [SerializeField] public float movementAmount;
+
     [SerializeField] private Vector2 movementInput;
 
     private void Awake()
@@ -24,7 +28,6 @@ public class PlayerInputManager : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
     }
 
     private void Start()
@@ -65,5 +68,42 @@ public class PlayerInputManager : MonoBehaviour
     {
         //IF WE DESTROY THIS OBJECT, UNSUBSCRIBE FROM THE EVENT  
         SceneManager.activeSceneChanged -= OnSceneChange;
+    }
+
+    //IF WE MINIMIZE OR LOWER THE WINDOW, WE STOP TAKING THE INPUTS 
+    private void OnApplicationFocus(bool hasFocus)
+    {
+        if (enabled)
+        {
+            playerControls.Enable();
+        }
+        else
+        {
+            playerControls.Disable();
+        }
+    }
+
+    private void Update()
+    {
+        HandleMovementInput();
+    }
+
+    private void HandleMovementInput()
+    {
+        verticalInput = movementInput.y;
+        horizontalInput = movementInput.x;
+        
+        //RETURNS THE NUMBER WITHOUT ITS SIGN.
+        movementAmount = Mathf.Clamp01(Math.Abs(verticalInput) + Math.Abs(horizontalInput));
+
+        //MAKES THE SPEED EITHER 0, 0.5 OR 1. SHOWING IDLE, WALKING AND RUNNING STATE.
+        if (movementAmount > 0 && movementAmount <= 0.5)
+        {
+            movementAmount = 0.5f;
+        }
+        else if(movementAmount > 0.5f && movementAmount <= 1)
+        {
+            movementAmount = 1;
+        }
     }
 }
