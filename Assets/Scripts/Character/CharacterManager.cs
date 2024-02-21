@@ -31,7 +31,7 @@ public class CharacterManager : NetworkBehaviour
             transform.position = Vector3.SmoothDamp
                 (transform.position, 
                       characterNetworkManager.networkPosition.Value, 
-                    ref characterNetworkManager.networkPositionVelocity, 
+                     ref characterNetworkManager.networkPositionVelocity, 
                     characterNetworkManager.networkPositionSmoothTime);
 
             transform.rotation = Quaternion.Slerp
@@ -40,5 +40,11 @@ public class CharacterManager : NetworkBehaviour
                 characterNetworkManager.networkRotationSmoothTime);
         }
     }
-    
+
+    protected void LateUpdate()
+    {
+        if (!IsOwner)
+            return;
+        PlayerCamera.Instance.HandleAllCameraActions();
+    }
 }

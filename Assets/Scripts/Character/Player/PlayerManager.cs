@@ -25,4 +25,14 @@ public class PlayerManager : CharacterManager
         //HANDLE MOVEMENT
         playerLocomotionManager.HandleAllMovement();
     }
+
+    public override void OnNetworkSpawn()
+    {
+        base.OnNetworkSpawn();
+
+        if (IsOwner)
+        {
+            PlayerCamera.Instance.player = this;
+        }
+    }
 }
