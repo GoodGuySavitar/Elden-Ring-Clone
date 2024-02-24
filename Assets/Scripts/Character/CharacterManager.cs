@@ -6,14 +6,16 @@ using UnityEngine;
 
 public class CharacterManager : NetworkBehaviour
 {
-    public CharacterController characterController;
-
-    private CharacterNetworkManager characterNetworkManager;
+    [HideInInspector]public CharacterController characterController;
+    [HideInInspector] public Animator animator;
+    
+    [HideInInspector]public CharacterNetworkManager characterNetworkManager;
     protected virtual void Awake()
     {
         DontDestroyOnLoad(this);
         characterController = GetComponent<CharacterController>();
         characterNetworkManager = GetComponent<CharacterNetworkManager>();
+        animator = GetComponent<Animator>();
     }
 
     protected virtual void Update()

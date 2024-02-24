@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting.Dependencies.NCalc;
+using UnityEditor;
 using UnityEngine;
     
-public class PlayerLocomotionManager : CharacterManager
+public class PlayerLocomotionManager : CharacterLocomotionManager
 {   
     private PlayerManager player;
     
@@ -25,24 +26,47 @@ public class PlayerLocomotionManager : CharacterManager
     
         player = GetComponent<PlayerManager>();
     }
-    
+
+    protected override void Update()
+    {
+        base.Update();
+        if (player.IsOwner)
+        {
+            player.characterNetworkManager.verticalMovement.Value = verticalMovement;
+            player.characterNetworkManager.horizontalMovement.Value = horizontalMovement;
+            player.characterNetworkManager.moveAmount.Value = moveAmount;
+        }
+        else
+        {
+            verticalMovement = player.characterNetworkManager.verticalMovement.Value;
+            horizontalMovement = player.characterNetworkManager.horizontalMovement.Value;
+            moveAmount = player.characterNetworkManager.moveAmount.Value;
+
+            //IF NOT LOCKED ON, PASS MOVE AMOUNT
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+            
+            //IF LOCKED ON, PASS HORZ AND VERT
+        }
+    }
+
     public void HandleAllMovement()
     {
         HandleGroundedMovement();
         //AERIAL MOVEMENT
     }
 
-    private void GetVerticalAndHorizontalInput()
+    private void GetMovementValues()
     {
         verticalMovement = PlayerInputManager.Instance.verticalInput;
         horizontalMovement = PlayerInputManager.Instance.horizontalInput;
-        
+        moveAmount = PlayerInputManager.Instance.moveAmount;
+
         //CLAMP THE MOVEMENTS
     }
 
     public void HandleGroundedMovement()
     {
-        GetVerticalAndHorizontalInput();
+        GetMovementValues();
         HandleRotation();
         //MOVEMENT BASED ON THE DIRECTION OF THE CAMERA PERSPECTIVE AND INPUT   
         moveDirection = PlayerCamera.Instance.transform.forward * verticalMovement;
@@ -50,11 +74,11 @@ public class PlayerLocomotionManager : CharacterManager
         moveDirection.Normalize();
         moveDirection.y = 0;
 
-        if (PlayerInputManager.Instance.movementAmount > 0.5f)
+        if (PlayerInputManager.Instance.moveAmount > 0.5f)
         {
                 player.characterController.Move( Time.deltaTime * runningSpeed * moveDirection );
         }
-        else if (PlayerInputManager.Instance.movementAmount <= 0.5f)
+        else if (PlayerInputManager.Instance.moveAmount <= 0.5f)
         {
             player.characterController.Move(Time.deltaTime * walkingSpeed * moveDirection );
         }

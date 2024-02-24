@@ -11,13 +11,14 @@ public class PlayerInputManager : MonoBehaviour
     //2. MOVE THE PLAYER BASED ON THOSE VALUES 
 
     public static PlayerInputManager Instance;
+    public PlayerManager player;
     private PlayerControls playerControls;
     
     [Header("PLAYER MOVEMENT INPUT")]
     [SerializeField] private Vector2 movementInput;
     public float verticalInput;
     public float horizontalInput;
-    [SerializeField] public float movementAmount;
+    [SerializeField] public float moveAmount;
     
     [Header("CAMERA ROTATION INPUT")]
     [SerializeField] private Vector2 cameraMovementInput;
@@ -43,7 +44,7 @@ public class PlayerInputManager : MonoBehaviour
         Instance.enabled = false;
     }
 
-    private void OnSceneChange(Scene oldScene , Scene newScene)     
+    private void OnSceneChange(Scene oldScene , Scene newScene)
     {
         //IF WE ARE LOADING INTO THE WORLD SCENE, WE ENABLE THE PLAYER CONTROLS BY ENABLING THIS SCRIPT
         if (newScene.buildIndex == WorldSaveGameManager.Instance.GetWorldSceneIndex()) 
@@ -101,17 +102,28 @@ public class PlayerInputManager : MonoBehaviour
         horizontalInput = movementInput.x;
         
         //RETURNS THE NUMBER WITHOUT ITS SIGN.
-        movementAmount = Mathf.Clamp01(Math.Abs(verticalInput) + Math.Abs(horizontalInput));
+        moveAmount = Mathf.Clamp01(Math.Abs(verticalInput) + Math.Abs(horizontalInput));
 
         //MAKES THE SPEED EITHER 0, 0.5 OR 1. SHOWING IDLE, WALKING AND RUNNING STATE.
-        if (movementAmount > 0 && movementAmount <= 0.5)
+        if (moveAmount > 0 && moveAmount <= 0.5)
         {
-            movementAmount = 0.5f;
+            moveAmount = 0.5f;
         }
-        else if(movementAmount > 0.5f && movementAmount <= 1)
+        else if(moveAmount > 0.5f && moveAmount <= 1)
         {
-            movementAmount = 1;
+            moveAmount = 1;
         }
+        
+        //WE DONT USE THE HORIZONTAL VALUES BECAUSE WHEN WE ARENT LOCKED ON, WE USE ONLY IDLE,WALK AND RUN ANIMATIONS
+        //AND THE CAMERA ROTATES USING ONLY THESE ANIMATIONS
+        //WHEN WE ARE LOCKED ON TO THE ENEMY, WE CAN ENABLE THE HORIZONTAL VALUES TO ENABLE STRAFING
+
+        if (player == null)
+            return;
+        //IF WE ARE NOT LOCKED ON, USE ONLY MOVEMENT AMOUNT 
+        player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+        
+        //IF WE ARE LOCKED ON, PASS THE HORIZONTAL VALUES 
     }
 
     private void HandleCameraMovementInput()
