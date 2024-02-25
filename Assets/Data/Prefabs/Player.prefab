@@ -113,7 +113,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1786299936
+  GlobalObjectIdHash: 2030219221
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -135,6 +135,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterController: {fileID: 5783939705642508028}
   animator: {fileID: 0}
+  characterNetworkManager: {fileID: 0}
+  isPerformingAction: 0
+  applyRootMotion: 0
+  canRotate: 1
+  canMove: 1
   playerAnimatorManager: {fileID: 0}
   playerLocomotionManager: {fileID: 0}
 --- !u!114 &-8940569421045783885
@@ -149,13 +154,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b026ef6e4ef1ce4782685605e3c98e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterController: {fileID: 5783939705642508028}
-  animator: {fileID: 0}
   verticalMovement: 0
   horizontalMovement: 0
   moveAmount: 0
-  walkingSpeed: 2
-  runningSpeed: 5
+  walkingSpeed: 1.5
+  runningSpeed: 4.5
   rotationSpeed: 15
 --- !u!143 &5783939705642508028
 CharacterController:
@@ -202,6 +205,12 @@ MonoBehaviour:
   networkPositionVelocity: {x: 0, y: 0, z: 0}
   networkPositionSmoothTime: 0.1
   networkRotationSmoothTime: 0.1
+  horizontalMovement:
+    m_InternalValue: 0
+  verticalMovement:
+    m_InternalValue: 0
+  moveAmount:
+    m_InternalValue: 0
 --- !u!95 &7981285390609654142
 Animator:
   serializedVersion: 5
@@ -246,6 +255,10 @@ PrefabInstance:
     - target: {fileID: 100166, guid: 340f99b8334a14c4a8a01dce6e1e5348, type: 3}
       propertyPath: m_Name
       value: VBOT_LOD
+      objectReference: {fileID: 0}
+    - target: {fileID: 100166, guid: 340f99b8334a14c4a8a01dce6e1e5348, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 400158, guid: 340f99b8334a14c4a8a01dce6e1e5348, type: 3}
       propertyPath: m_LocalScale.x
@@ -342,6 +355,10 @@ PrefabInstance:
     - target: {fileID: 400166, guid: 340f99b8334a14c4a8a01dce6e1e5348, type: 3}
       propertyPath: m_ConstrainProportionsScale
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9500000, guid: 340f99b8334a14c4a8a01dce6e1e5348, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 13700000, guid: 340f99b8334a14c4a8a01dce6e1e5348, type: 3}
       propertyPath: m_Enabled

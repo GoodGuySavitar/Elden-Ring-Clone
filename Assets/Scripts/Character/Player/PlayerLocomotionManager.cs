@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using Unity.VisualScripting.Dependencies.NCalc;
 using UnityEditor;
 using UnityEngine;
@@ -9,17 +10,20 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
     private PlayerManager player;
     
     //SAME AS PLAYER VERTICAL AND HORIZONTAL INPUT VALUES IN THE INPUT MANAGER
-    
-    public float verticalMovement;
-    public float horizontalMovement;
-    public float moveAmount;
-    private Vector3 turnRotationDirection;
+    [HideInInspector]public float verticalMovement;
+    [HideInInspector]public float horizontalMovement;
+    [HideInInspector]public float moveAmount;
 
+    [Header("MOVEMENT SETTINGS")]
+    private Vector3 turnRotationDirection;
+    private Vector3 moveDirection;
     [SerializeField] private float walkingSpeed = 2;
     [SerializeField] private float runningSpeed = 5;
     [SerializeField] private float rotationSpeed = 15;
+
+    [Header("DODGE")] 
+    private Vector3 rollDirection;
     
-    private Vector3 moveDirection;
     protected override void Awake()
     {
         base.Awake();
@@ -52,6 +56,7 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
     public void HandleAllMovement()
     {
         HandleGroundedMovement();
+        HandleRotation();
         //AERIAL MOVEMENT
     }
 
@@ -66,8 +71,10 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
 
     public void HandleGroundedMovement()
     {
+        if (!player.canMove)
+            return;
+        
         GetMovementValues();
-        HandleRotation();
         //MOVEMENT BASED ON THE DIRECTION OF THE CAMERA PERSPECTIVE AND INPUT   
         moveDirection = PlayerCamera.Instance.transform.forward * verticalMovement;
         moveDirection = moveDirection + PlayerCamera.Instance.transform.right * horizontalMovement;
@@ -87,6 +94,9 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
 
     public void HandleRotation()
     {
+        if(!player.canRotate)
+            return;
+        
         turnRotationDirection = Vector3.zero;
         turnRotationDirection = PlayerCamera.Instance.cameraObject.transform.forward * verticalMovement;
         turnRotationDirection = turnRotationDirection + PlayerCamera.Instance.cameraObject.transform.right * horizontalMovement;
@@ -103,5 +113,29 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
         Quaternion turnRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
         transform.rotation = turnRotation;
     }
-    
+
+    public void AttemptToPerformDodge()
+    {
+        if (player.isPerformingAction)
+            return;
+        
+        //IF MOVING, PERFORM A ROLL
+        if (moveAmount > 0)
+        {
+            rollDirection = PlayerCamera.Instance.transform.forward * verticalMovement;  //can also use PlayerInputManager.Instance.verticalInput;
+            rollDirection += PlayerCamera.Instance.transform.right * horizontalMovement;
+            rollDirection.y = 0;
+            rollDirection.Normalize();
+
+            Quaternion playerRotation = Quaternion.LookRotation(rollDirection);
+            player.transform.rotation = playerRotation;
+
+            player.playerAnimatorManager.PlayTargetActionAnimation("Roll_Forward_01",true,true);
+        }
+        //IF STATIONARY, PERFORM A BACKSTEP
+        else
+        {
+            player.playerAnimatorManager.PlayTargetActionAnimation("Jump_Backward_01",true,true);
+        }
+    }
 }   
