@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Unity.Netcode;
 
 public class CharacterAnimatorManager : MonoBehaviour
 {
@@ -32,5 +33,8 @@ public class CharacterAnimatorManager : MonoBehaviour
         character.isPerformingAction = isPerformingAction;
         character.canRotate = canRotate;
         character.canMove = canMove;
+        
+        //TELL THE HOST/SERVER THAT WE PLAYED AN ANIMATION AND PLAY THAT ANIMATION FOR EVERYBODY ELSE PRESENT 
+        character.characterNetworkManager.NotifyTheServerOfActionAnimationServerRpc(NetworkManager.Singleton.LocalClientId , targetAnimation, applyRotation);
     }
 }
