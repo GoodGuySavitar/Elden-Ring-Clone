@@ -27,6 +27,8 @@ public class PlayerInputManager : MonoBehaviour
 
     [Header("PLAYER ACTIONS INPUT")] 
     [SerializeField] private bool dodgeInput = false;
+    [SerializeField] private bool sprintInput = false;
+    
     
     private void Awake()
     {
@@ -72,6 +74,11 @@ public class PlayerInputManager : MonoBehaviour
             playerControls.PlayerMovement.Movement.performed += i => movementInput = i.ReadValue<Vector2>();
             playerControls.CameraMovement.Movement.performed += i => cameraMovementInput = i.ReadValue<Vector2>();
             playerControls.PlayerActions.Dodge.performed += i => dodgeInput = true;
+            
+            //HOLDING THE BUTTON SETS THE BOOL TO TRUE
+            playerControls.PlayerActions.Sprint.performed += i => sprintInput = true;
+            //RELEASING THE BUTTON SETS THE BUTTON TO FALSE 
+            playerControls.PlayerActions.Sprint.canceled += i => sprintInput = false;
         }
         playerControls.Enable();
     }
@@ -105,6 +112,7 @@ public class PlayerInputManager : MonoBehaviour
         HandlePlayerMovementInput();
         HandleCameraMovementInput();
         HandleDodgeMovement();
+        HandleSprinting();
     }
     
     // MOVEMENT
@@ -133,7 +141,7 @@ public class PlayerInputManager : MonoBehaviour
         if (player == null)
             return;
         //IF WE ARE NOT LOCKED ON, USE ONLY MOVEMENT AMOUNT 
-        player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+        player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount , player.playerNetworkManager.isSprinting.Value);
         
         //IF WE ARE LOCKED ON, PASS THE HORIZONTAL VALUES 
     }
@@ -154,6 +162,18 @@ public class PlayerInputManager : MonoBehaviour
             //  FUTURE NOTE: RETURN(DO NOTHING)  IF THE UI WINDOW OR MENU IS OPEN
             
             player.playerLocomotionManager.AttemptToPerformDodge();
+        }
+    }
+
+    private void HandleSprinting()
+    {
+        if (sprintInput)
+        {
+            player.playerLocomotionManager.HandleSprinting();
+        }
+        else
+        {
+            player.playerNetworkManager.isSprinting.Value = false;
         }
     }
 }

@@ -7,15 +7,31 @@ using Unity.Netcode;
 public class CharacterAnimatorManager : MonoBehaviour
 {
     private CharacterManager character;
+
+    private int vertical;
+    private int horizontal;
+    
     protected virtual void Awake()
     {
         character = GetComponent<CharacterManager>();
+
+        // SETS STRING TO HASH SO THAT WE DONT HAVE TO WRITE STRINGS EVERYTIME
+        vertical = Animator.StringToHash("Vertical");
+        horizontal = Animator.StringToHash("Horizontal");
     }
 
-    public void UpdateAnimatorMovementParameters(float horizontalValue, float verticalValue)
+    public void UpdateAnimatorMovementParameters(float horizontalMovement, float verticalMovement, bool isSprinting)
     {
-        character.animator.SetFloat("Horizontal", horizontalValue, 0.1f, Time.deltaTime);
-        character.animator.SetFloat("Vertical", verticalValue, 0.1f, Time.deltaTime);
+        float horizontalAmount = horizontalMovement;
+        float verticalAmount = verticalMovement;
+        
+        if (isSprinting)
+        {
+            verticalAmount = 2;
+        }
+        character.animator.SetFloat(horizontal, horizontalAmount, 0.1f, Time.deltaTime);
+        character.animator.SetFloat(vertical , verticalAmount, 0.1f, Time.deltaTime);
+        
     }
 
     public virtual void PlayTargetActionAnimation(

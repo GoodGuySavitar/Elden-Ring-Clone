@@ -19,6 +19,7 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
     private Vector3 moveDirection;
     [SerializeField] private float walkingSpeed = 2;
     [SerializeField] private float runningSpeed = 5;
+    [SerializeField] private float sprintingSpeed = 6.5f;
     [SerializeField] private float rotationSpeed = 15;
 
     [Header("DODGE")] 
@@ -47,7 +48,7 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
             moveAmount = player.characterNetworkManager.moveAmount.Value;
 
             //IF NOT LOCKED ON, PASS MOVE AMOUNT
-            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount);
+            player.playerAnimatorManager.UpdateAnimatorMovementParameters(0, moveAmount , player.playerNetworkManager.isSprinting.Value);
             
             //IF LOCKED ON, PASS HORZ AND VERT
         }
@@ -81,15 +82,21 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
         moveDirection.Normalize();
         moveDirection.y = 0;
 
-        if (PlayerInputManager.Instance.moveAmount > 0.5f)
+        if (player.playerNetworkManager.isSprinting.Value)
         {
+            player.characterController.Move( Time.deltaTime * sprintingSpeed * moveDirection );
+        }
+        else
+        {
+            if (PlayerInputManager.Instance.moveAmount > 0.5f)
+            {
                 player.characterController.Move( Time.deltaTime * runningSpeed * moveDirection );
+            }
+            else if (PlayerInputManager.Instance.moveAmount <= 0.5f)
+            {
+                player.characterController.Move(Time.deltaTime * walkingSpeed * moveDirection );
+            }    
         }
-        else if (PlayerInputManager.Instance.moveAmount <= 0.5f)
-        {
-            player.characterController.Move(Time.deltaTime * walkingSpeed * moveDirection );
-        }
-
     }
 
     public void HandleRotation()
@@ -112,6 +119,28 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
         Quaternion newRotation = Quaternion.LookRotation(turnRotationDirection);
         Quaternion turnRotation = Quaternion.Slerp(transform.rotation, newRotation, rotationSpeed * Time.deltaTime);
         transform.rotation = turnRotation;
+    }
+
+    public void HandleSprinting()
+    {
+        if (player.isPerformingAction)
+        {
+            player.playerNetworkManager.isSprinting.Value = false;
+        }
+        
+        // IF MOVING, SPRINTING IS SET TO TRUE 
+        if (moveAmount >= 0.5)
+        {
+            player.playerNetworkManager.isSprinting.Value = true;
+        }
+        //IF NOT MOVING/MOVING SLOWLY, SPRINTING IS SET TO FALSE
+        else
+        {
+            player.playerNetworkManager.isSprinting.Value = false;
+        }
+        
+        // IF NO STAMINA THEN SPRINTING IS SET TO FALSE 
+        // IF THE PLAYER IS STANDING, SPRINTING IS SET TO FALSE
     }
 
     public void AttemptToPerformDodge()
