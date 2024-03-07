@@ -21,9 +21,12 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
     [SerializeField] private float runningSpeed = 5;
     [SerializeField] private float sprintingSpeed = 6.5f;
     [SerializeField] private float rotationSpeed = 15;
+    [SerializeField] private float sprintingStaminaCost = 2; 
 
     [Header("DODGE")] 
     private Vector3 rollDirection;
+
+    [SerializeField] private float dodgeStaminaCost = 25;
     
     protected override void Awake()
     {
@@ -125,6 +128,11 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
     {
         if (player.isPerformingAction)
         {
+            player.playerNetworkManager.isSprinting.Value = false; 
+        }
+
+        if (player.playerNetworkManager.currentStamina.Value <= 0)
+        {
             player.playerNetworkManager.isSprinting.Value = false;
         }
         
@@ -138,14 +146,21 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
         {
             player.playerNetworkManager.isSprinting.Value = false;
         }
+
+        if (player.playerNetworkManager.isSprinting.Value)
+        {
+            player.playerNetworkManager.currentStamina.Value -= sprintingStaminaCost * Time.deltaTime;
+        }
         
-        // IF NO STAMINA THEN SPRINTING IS SET TO FALSE 
         // IF THE PLAYER IS STANDING, SPRINTING IS SET TO FALSE
     }
 
     public void AttemptToPerformDodge()
     {
         if (player.isPerformingAction)
+            return;
+
+        if (player.playerNetworkManager.currentStamina.Value <= 0)
             return;
         
         //IF MOVING, PERFORM A ROLL
@@ -166,5 +181,7 @@ public class PlayerLocomotionManager : CharacterLocomotionManager
         {
             player.playerAnimatorManager.PlayTargetActionAnimation("Jump_Backward_01",true,true);
         }
+
+        player.playerNetworkManager.currentStamina.Value -= dodgeStaminaCost;
     }
 }   

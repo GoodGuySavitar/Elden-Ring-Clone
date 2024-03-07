@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
+using UnityEditor;
 using UnityEngine;
 
 public class CharacterManager : NetworkBehaviour
@@ -55,4 +56,6 @@ public class CharacterManager : NetworkBehaviour
             return;
         PlayerCamera.Instance.HandleAllCameraActions();
     }
+
+    
 }

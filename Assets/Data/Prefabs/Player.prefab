@@ -77,19 +77,22 @@ PrefabInstance:
       addedObject: {fileID: -8123732467187715694}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 97c2ba442c08dd548a7d2ace827785c7, type: 3}
       insertIndex: -1
+      addedObject: {fileID: 8309411913983521107}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 97c2ba442c08dd548a7d2ace827785c7, type: 3}
+      insertIndex: -1
       addedObject: {fileID: -8940569421045783885}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 97c2ba442c08dd548a7d2ace827785c7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3908560880876413223}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 97c2ba442c08dd548a7d2ace827785c7, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -800427945088273562}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 97c2ba442c08dd548a7d2ace827785c7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5783939705642508028}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 97c2ba442c08dd548a7d2ace827785c7, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8309411913983521107}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 97c2ba442c08dd548a7d2ace827785c7, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7981285390609654142}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 97c2ba442c08dd548a7d2ace827785c7, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3908560880876413223}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 97c2ba442c08dd548a7d2ace827785c7, type: 3}
       insertIndex: -1
       addedObject: {fileID: 5478341982231276499}
@@ -119,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 1786299936
+  GlobalObjectIdHash: 2030219221
   AlwaysReplicateAsRoot: 0
   SynchronizeTransform: 1
   ActiveSceneSynchronization: 0
@@ -149,51 +152,6 @@ MonoBehaviour:
   playerAnimatorManager: {fileID: 0}
   playerLocomotionManager: {fileID: 0}
   playerNetworkManager: {fileID: 0}
---- !u!114 &-8940569421045783885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1099759141829497209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b026ef6e4ef1ce4782685605e3c98e8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  verticalMovement: 0
-  horizontalMovement: 0
-  moveAmount: 0
-  walkingSpeed: 1.5
-  runningSpeed: 4.5
-  sprintingSpeed: 6.5
-  rotationSpeed: 15
---- !u!143 &5783939705642508028
-CharacterController:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1099759141829497209}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Height: 1.88
-  m_Radius: 0.21
-  m_SlopeLimit: 45
-  m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0.91, z: 0}
 --- !u!114 &8309411913983521107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -221,6 +179,75 @@ MonoBehaviour:
     m_InternalValue: 0
   isSprinting:
     m_InternalValue: 0
+--- !u!114 &-8940569421045783885
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099759141829497209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b026ef6e4ef1ce4782685605e3c98e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  verticalMovement: 0
+  horizontalMovement: 0
+  moveAmount: 0
+  walkingSpeed: 1.5
+  runningSpeed: 4.5
+  sprintingSpeed: 6.5
+  rotationSpeed: 15
+--- !u!114 &3908560880876413223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099759141829497209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0bbcef95fa6e044c9b70c104dc81e01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &-800427945088273562
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099759141829497209}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5441118d1b5d8fb4d8b0badd1d3dc6d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!143 &5783939705642508028
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1099759141829497209}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Height: 1.88
+  m_Radius: 0.21
+  m_SlopeLimit: 45
+  m_StepOffset: 0.3
+  m_SkinWidth: 0.08
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.91, z: 0}
 --- !u!95 &7981285390609654142
 Animator:
   serializedVersion: 5
@@ -242,18 +269,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &3908560880876413223
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1099759141829497209}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e0bbcef95fa6e044c9b70c104dc81e01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &5478341982231276499
 AudioSource:
   m_ObjectHideFlags: 0
