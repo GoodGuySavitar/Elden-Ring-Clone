@@ -9,8 +9,7 @@ using UnityEngine.SceneManagement;
 public class WorldSaveGameManager : MonoBehaviour
 {
     public static WorldSaveGameManager Instance;
-
-    [SerializeField] private PlayerManager player;
+    public PlayerManager player;
 
     [Header("SAVE/LOAD")] 
     [SerializeField] private bool saveGame;
@@ -115,12 +114,32 @@ public class WorldSaveGameManager : MonoBehaviour
         return fileName;
     }
 
-    public void CreateNewGame()
+    public void AttemptToCreateNewGame()
     {
-        //CREATE A NEW FILE, WITH THE FILE NAME DEPENDING ON THE SLOT WE ARE USING
-       saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(currentCharacterSlotBeingUsed);
-
-        currentCharacterData = new CharacterSaveData();
+        saveFileDataWriter = new SaveFileDataWriter();
+        saveFileDataWriter.saveFileName = Application.persistentDataPath;
+        //CHECK IF WE CAN CREATE A NEW SAVE FILE(CHECK FOR EXISTING SAVE FILES FIRST)
+        saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_01);
+        if (!saveFileDataWriter.CheckToSeeIfFileExists())
+        {
+            currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_01;
+            currentCharacterData = new CharacterSaveData();
+            StartCoroutine(LoadWorldScene());
+            return;
+        }
+        
+        //CHECK IF WE CAN CREATE A NEW SAVE FILE(CHECK FOR EXISTING SAVE FILES FIRST)
+        saveFileName = DecideCharacterFileNameBasedOnCharacterSlotBeingUsed(CharacterSlot.CharacterSlot_02);
+        if (!saveFileDataWriter.CheckToSeeIfFileExists())
+        {
+            currentCharacterSlotBeingUsed = CharacterSlot.CharacterSlot_02;
+            currentCharacterData = new CharacterSaveData();
+            StartCoroutine(LoadWorldScene());
+            return;
+        }
+       
+        //IF THERE ARE NO FREE SLOTS, NOTIFY THE PLAYER
+        
     }
 
     public void LoadGame()
@@ -145,6 +164,7 @@ public class WorldSaveGameManager : MonoBehaviour
         saveFileDataWriter = new SaveFileDataWriter();
         //  GENERALLY WORKS ON MULTIPLE MACHINE TYPES (Application.persistentDataPath)
         saveFileDataWriter.saveDataDirectoryPath = Application.persistentDataPath;
+        Debug.Log(saveFileDataWriter.saveDataDirectoryPath);
         saveFileDataWriter.saveFileName = saveFileName;
         
         //PASS THE PLAYER INFO, FROM GAME, TO THEIR SAVE FILE 
@@ -195,6 +215,7 @@ public class WorldSaveGameManager : MonoBehaviour
     public IEnumerator LoadWorldScene()
     {
         AsyncOperation loadOperation = SceneManager.LoadSceneAsync(worldSceneIndex);
+        player.LoadGameDataToCurrentCharacterData(ref currentCharacterData);
         
         yield return null;
     }
@@ -203,4 +224,6 @@ public class WorldSaveGameManager : MonoBehaviour
     {
         return worldSceneIndex;
     }
+
+    
 }

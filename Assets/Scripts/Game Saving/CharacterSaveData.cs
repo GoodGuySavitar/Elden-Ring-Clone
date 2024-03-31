@@ -8,7 +8,7 @@ using UnityEngine;
 public class CharacterSaveData
 {
     [Header("Character name")]
-    public string characterName;
+    public string characterName = "Character";
 
     [Header("Time player")] 
     public float secondsPlayed;

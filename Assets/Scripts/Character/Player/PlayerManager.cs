@@ -44,7 +44,8 @@ public class PlayerManager : CharacterManager
         {
             PlayerCamera.Instance.player = this;
             PlayerInputManager.Instance.player = this;  //ONLY ONE LOCAL PLAYER IN THE GAME
-
+            WorldSaveGameManager.Instance.player = this;
+            
             playerNetworkManager.currentStamina.OnValueChanged += PlayerUIManager.Instance.playerUIHudManager.SetNewStaminaValue;
             playerNetworkManager.currentStamina.OnValueChanged += playerStatsManager.ResetStaminaRegenerationTimer;
             

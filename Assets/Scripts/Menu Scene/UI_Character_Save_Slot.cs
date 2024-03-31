@@ -206,4 +206,10 @@ public class UI_Character_Save_Slot : MonoBehaviour
             }
         }
     }
+
+    public void LoadGameFromCharacterSaveSlots()
+    {
+        WorldSaveGameManager.Instance.currentCharacterSlotBeingUsed = characterSlot;
+        WorldSaveGameManager.Instance.LoadGame();
+    }
 }
